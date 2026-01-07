@@ -1,3 +1,9 @@
+Before doing anything:
+
+1. Clone repository and install requirements.
+2. make a .env file and add your GEMINI_API_KEY
+
+
 Simple usage guide:
 
 1. Make a folder "tokens" and add oauth2 tokens inside oauth.json file inside this folder.
