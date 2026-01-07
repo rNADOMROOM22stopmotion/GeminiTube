@@ -66,7 +66,7 @@ def to_update_video_list():
             return vid_list[:i]
     return None
 
-def to_update_video_data() -> dict[str, str] | list[Any]:
+def to_update_video_data() -> list[dict[str, str]] | None:
     """
     Returns:
         final dictionary of videos to be updated by AI.
@@ -89,7 +89,7 @@ def to_update_video_data() -> dict[str, str] | list[Any]:
             vid_dict['description'] = video['snippet']['description']
             final_data_list.append(vid_dict)
     except TypeError:
-        return {"message": "video already up to date"}
+        return None
     return final_data_list
 
 
