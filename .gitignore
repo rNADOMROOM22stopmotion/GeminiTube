@@ -1,4 +1,5 @@
 .venv/bin
-tokens/oauth.json
-tokens/token.pickle
+tokens/*
 .env
+__pycache__
+logged_vid_data/*
