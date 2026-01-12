@@ -1,3 +1,4 @@
+import csv
 from datetime import datetime
 import json
 from pathlib import Path
@@ -9,11 +10,12 @@ from models import VideoBody, Snippet, Status, GeminiOutput, GeminiInput
 from utils.videos import to_update_video_data, get_video_list
 
 video_data = to_update_video_data()
-video_data = None
+# video_data = None
 if video_data:
     # --backing up current titles/ desc --
     BASE_DIR = Path(__file__).resolve().parent
     log_path = BASE_DIR / "logged_vid_data"
+    csv_path = BASE_DIR / "utils/videos.csv"
 
     with open(f"{log_path}/change_{datetime.now()}.json", "w", encoding="utf-8") as f:
         json.dump(video_data, f, indent=4, ensure_ascii=False)
@@ -39,7 +41,17 @@ if video_data:
                           status=Status()
                           ).model_dump()
         response = requests.put(url= url, headers=header, params=parameters,json=body)
-        print(response.json())
+        response_data = response.json()
+        pprint(response.json())
+        if not response_data.get('error', False):
+            # updating csv if theres no error
+            rows = [
+                ['lastvideoid'],
+                [video['id']]
+            ]
+            with open(csv_path, 'w') as f:
+                writer = csv.writer(f)
+                writer.writerows(rows)
 
 # vid_list, data = get_video_list()
 # pprint(data)

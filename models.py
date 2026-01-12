@@ -25,9 +25,9 @@ class VideoBody(BaseModel):
 # -- gemini api stuff --
 
 class GeminiOutput(BaseModel):
-    title: str = Field(description='Title of the youtube video, optimized for best CTR but not too different/ changed meaning from original. The title should be english first, followed by gujarati. take heavy inspiration from provided title. title must be less than 100 words',
+    title: str = Field(description='Title of the video, optimized for best CTR but not too different/ changed meaning from original. The title should be english first, then gujarati. title must be less than 100 letters',
                        max_length=100)
-    description: str = Field(description='Description of the youtube video. Keep the first paragraph reserved for Ingredients and their quantity. Y ou may use relevent emojis and newline characters after each ingredient. After ingredients, leave 2 new lines and generate a 45-60 paragraph related/ relevent to the video recipe. After that leave 2 more new lines and give link to my instagram with required title (e.g. Instagram: https://www.instagram.com/unsulliedfoods/?hl=en). Finally, leave 3 more new lines and generate about 10 hashtags realted to the content optimzed for maximum reach.')
+    description: str = Field(description='Description of the youtube video. Keep the first paragraph reserved for Ingredients and their quantity. You may use relevent emojis and newline characters after each ingredient. After ingredients, leave 2 new lines and generate a 45-60 paragraph related/ relevent to the video recipe. After that leave 1 more new line and give link to my instagram with required title (e.g. Instagram: https://www.instagram.com/p/CuWxeGhM416/). Finally, leave 3 more new lines and generate about 10 hashtags related to the content optimized for maximum reach.')
     tags: list[str] = Field(description='from the provided titles and description, generate 15 relevent tags for youtube.')
 
 class GeminiInput(BaseModel):

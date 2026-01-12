@@ -1,24 +1,21 @@
 import csv
 from pathlib import Path
 from pprint import pprint
-from typing import Any
-
 import requests
 from utils.auth import authorization
 from utils.playlist import get_playlist_id
 
 URL = "https://www.googleapis.com/youtube/v3/playlistItems"
+BASE_DIR = Path(__file__).resolve().parent
 
 def get_video_list(token: str = authorization().token ):
     """
-    Makes request to youtube data api
+    Makes request to YouTube data api
 
     Returns:
         list of recently uploaded 50 videos, their data
     """
     url = URL
-
-
     header = {
         "Authorization": f"Bearer {token}"
     }
@@ -29,11 +26,7 @@ def get_video_list(token: str = authorization().token ):
     }
     response = requests.get(url, headers=header, params=parameters)
     data = response.json()
-    #pprint(data)
-    video_id_list = []
-    for video in data['items']:
-        video_id_list.append(video['snippet']['resourceId']['videoId'])
-    return video_id_list, data
+    return data
 
 
 def to_update_video_list():
@@ -43,11 +36,13 @@ def to_update_video_list():
         Returns:
             list of videos that need to be updated with AI.
     """
-    vid_list = get_video_list()[0]
 
-    BASE_DIR = Path(__file__).resolve().parent
+    vid_data = get_video_list()
+    vid_list = [video['snippet']['resourceId']['videoId'] for video in vid_data['items']]
+
     csv_path = BASE_DIR / "./videos.csv"
 
+    #reading csv
     with open(csv_path, 'r') as f:
         reader = csv.reader(f)
         next(reader)  # SKIP HEADER
@@ -55,14 +50,6 @@ def to_update_video_list():
             last_video_id = row[0]
     for i, video_id in enumerate(vid_list):
         if video_id == last_video_id and i != 0:
-            #updating csv
-            rows = [
-                ['lastvideoid'],
-                [vid_list[0]]
-            ]
-            with open(csv_path, 'w') as f:
-                writer = csv.writer(f)
-                writer.writerows(rows)
             return vid_list[:i]
     return None
 
@@ -73,7 +60,7 @@ def to_update_video_data() -> list[dict[str, str]] | None:
     """
 
     vid_list = to_update_video_list()
-    vid_data = get_video_list()[1]
+    vid_data = get_video_list()
 
 
     data_list = vid_data['items']
@@ -95,5 +82,8 @@ def to_update_video_data() -> list[dict[str, str]] | None:
 
 
 if __name__ == "__main__":
+    print(to_update_video_list())
     print(to_update_video_data())
+    # print(len(to_update_video_list()))
+    pprint(get_video_list())
     # BrasOb-Vh-s
