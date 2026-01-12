@@ -1,5 +1,6 @@
-.venv/bin
 tokens/*
 .env
 __pycache__
 logged_vid_data/*
+.idea
+.venv
