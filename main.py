@@ -7,9 +7,11 @@ import requests
 from utils.auth import authorization
 from AI import gen
 from models import VideoBody, Snippet, Status, GeminiOutput, GeminiInput
-from utils.videos import to_update_video_data, get_video_list
+from utils.videos import VideoAPI
 
-video_data = to_update_video_data()
+
+vid_api = VideoAPI(auth_token=authorization())
+video_data = vid_api.to_update_video_data()
 # video_data = None
 if video_data:
     # --backing up current titles/ desc --
@@ -45,13 +47,7 @@ if video_data:
         pprint(response.json())
         if not response_data.get('error', False):
             # updating csv if theres no error
-            rows = [
-                ['lastvideoid'],
-                [video['id']]
-            ]
-            with open(csv_path, 'w') as f:
-                writer = csv.writer(f)
-                writer.writerows(rows)
+            vid_api.set_video(video_id=video['id'])
 
 # vid_list, data = get_video_list()
 # pprint(data)

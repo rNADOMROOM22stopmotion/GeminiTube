@@ -47,3 +47,6 @@ def authorization():
                 pickle.dump(credentials, f)
     return credentials
 
+if __name__ == "__main__":
+    print(authorization())
+
